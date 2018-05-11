@@ -15,6 +15,7 @@ class CoursesController < ApplicationController
 
   def create
     @course = Course.new(course_params)
+    @course.user = current_user
 
     if @course.save
       redirect_to courses_path
