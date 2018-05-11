@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe CoursesController do
   describe "GET index" do
-    it "assigns @courses and render" do
+    it "assigns @courses" do
       course1 = create(:course)
       course2 = create(:course)
 
@@ -36,6 +36,24 @@ RSpec.describe CoursesController do
       get :show, params: { id: course.id }
 
       expect(response).to render_template("show")
+    end
+  end
+
+  describe "GET new" do
+    it "assign @course" do
+      course = build(:course)
+
+      get :new
+
+      expect(assigns(:course)).to be_a_new(Course)
+    end
+
+    it "render template" do
+      course = build(:course)
+
+      get :new
+
+      expect(response).to render_template("new")
     end
   end
 end
