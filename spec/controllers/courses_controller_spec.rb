@@ -40,9 +40,10 @@ RSpec.describe CoursesController do
   end
 
   describe "GET new" do
-    it "assign @course" do
-      user = create(:user)
-      course = build(:course)
+    let(:user) { create(:user) }
+    let(:course) { build(:course) }
+
+    it "assigns @course" do
 
       sign_in user
       get :new
@@ -51,8 +52,6 @@ RSpec.describe CoursesController do
     end
 
     it "render template" do
-      user = create(:user)
-      course = build(:course)
 
       sign_in user
       get :new
