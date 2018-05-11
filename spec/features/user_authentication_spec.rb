@@ -13,21 +13,13 @@ RSpec.feature "User authentication" do
     end
   end
 
-  scenario "user signs out" do
-    create(:user, email: "user@example.com", password: "password")
+  it "sign out the user" do
+    user = User.create(:email => "user@example.com", :password => "password")
 
-    visit "/users/sign_in"
+    new_session_page.sign_in "user@example.com", "password"
+    navbar.sign_out user.email
 
-    within(".new_user") do
-      fill_in "Email", with: "user@example.com"
-      fill_in "Password", with: "password"
-    end
-
-    click_button "Log in"
-
-    click_link "Logout"
-
-    expect(page).not_to have_text "user@example.com"
+    expect(page).not_to have_content "user@example.com"
   end
 
   private
