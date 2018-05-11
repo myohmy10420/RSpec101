@@ -152,4 +152,28 @@ RSpec.describe CoursesController do
     end
   end
 
+  describe "DELETE destroy" do
+    it "assigns @course" do
+      course = create(:course)
+
+      delete :destroy, params:{ id: course.id }
+
+      expect(assigns[:course]).to eq(course)
+    end
+
+    it "deletes a record" do
+      course = create(:course)
+
+      expect { delete :destroy, params: { id: course.id } }.to change { Course.count }.by(-1)
+    end
+
+    it "redirects to courses_path" do
+      course = create(:course)
+
+      delete :destroy, params:{ id: course.id }
+
+      expect(response).to redirect_to courses_path
+    end
+  end
+
 end
