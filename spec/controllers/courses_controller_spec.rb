@@ -144,48 +144,62 @@ RSpec.describe CoursesController do
   end
 
   describe "PUT update" do
-    context "when course has title" do
-      it "assigns @course" do
-        course = create(:course)
+    let(:author) { FactoryGirl.create(:user) }
+    let(:not_author) { FactoryGirl.create(:user) }
+    context "sign in as author" do
+      before { sign_in author }
 
-        put :update, params: { id: course.id, course: { title: "Title", description: "Description" } }
+      context "when course has title" do
+        it "assigns @course" do
+          course = FactoryGirl.create(:course, user: author)
+          put :update, params: { id: course.id, course: { title: "Title", description: "Description" } }
+          expect(assigns[:course]).to eq(course)
+        end
 
-        expect(assigns[:course]).to eq(course)
-      end
+        it "changes value" do
+          course = FactoryGirl.create(:course, user: author)
 
-      it "changes value" do
-        course = create(:course)
+          put :update, params: { id: course.id, course: { title: "Title", description: "Description" } }
 
-        put :update, params: { id: course.id, course: { title: "Title", description: "Description" } }
+          expect(assigns[:course].title).to eq("Title")
+          expect(assigns[:course].description).to eq("Description")
+        end
 
-        expect(assigns[:course].title).to eq("Title")
-        expect(assigns[:course].description).to eq("Description")
-      end
+        it "redirects to course_path" do
+          course = FactoryGirl.create(:course, user: author)
 
-      it "redirects to course_path" do
-        course = create(:course)
+          put :update, params: { id: course.id, course: { title: "Title", description: "Description" } }
 
-        put :update, params: { id: course.id, course: { title: "Title", description: "Description" } }
+          expect(response).to redirect_to course_path(course)
+        end
 
-        expect(response).to redirect_to course_path(course)
+        context "when course doesn't have title " do
+          it "doesn't update a record " do
+            course = FactoryGirl.create(:course, user: author)
+
+            put :update, params: { id: course.id, course: { title: "", description: "Description" } }
+
+            expect(course.description).not_to eq("Description")
+          end
+
+          it "renders edit template" do
+            course = FactoryGirl.create(:course, user: author)
+
+            put :update, params: { id: course.id, course: { title: "", description: "Description" } }
+
+            expect(response).to render_template("edit")
+          end
+        end
       end
     end
 
-    context "when course doesn't have title " do
-      it "doesn't update a record " do
-        course = create(:course)
-
-        put :update, params: { id: course.id, course: { title: "", description: "Description" } }
-
-        expect(course.description).not_to eq("Description")
-      end
-
-      it "renders edit template" do
-        course = create(:course)
-
-        put :update, params: { id: course.id, course: { title: "", description: "Description" } }
-
-        expect(response).to render_template("edit")
+    context "sign in not as author" do
+      before { sign_in not_author }
+      it "raises an error" do
+        course = create(:course, user: author)
+        expect do
+          put :update, params: { id: course.id, course: { title: "", description: "Description" } }
+        end.to raise_error ActiveRecord::RecordNotFound
       end
     end
   end
