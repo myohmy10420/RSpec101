@@ -1,4 +1,4 @@
-require_relative "../../pages/base"
+require_relative "../../base"
 
 module PageObjects
   module Devise
@@ -6,12 +6,24 @@ module PageObjects
       class New < Base
 
         def sign_in(email, password)
-          within(".new_user") do
-            fill_in 'Email', :with => 'user@example.com'
-            fill_in 'Password', :with => 'password'
-          end
+          fill_form :user, email: email, password: password
           click_button "Log in"
         end
+
+        def sign_out(email)
+          user_dropdown(email).click_on "Logout"
+        end
+
+        def user_dropdown(email)
+          dropdown email
+        end
+
+        private
+
+        def dropdown(text)
+          find ".navbar .dropdown", text: text
+        end
+
       end
     end
   end

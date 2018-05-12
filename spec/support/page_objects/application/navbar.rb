@@ -1,4 +1,4 @@
-require_relative "../pages/base"
+require_relative "../base"
 
 module PageObjects
   module Application

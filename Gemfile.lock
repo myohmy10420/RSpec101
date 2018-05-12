@@ -95,6 +95,10 @@ GEM
       factory_girl (~> 4.7.0)
       railties (>= 3.0.0)
     ffi (1.9.23)
+    formulaic (0.4.0)
+      activesupport
+      capybara
+      i18n
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     i18n (1.0.1)
@@ -255,6 +259,7 @@ DEPENDENCIES
   database_rewinder
   devise
   factory_girl_rails (~> 4.7.0)
+  formulaic
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
   puma (~> 3.11)

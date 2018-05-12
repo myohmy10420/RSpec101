@@ -22,6 +22,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem "factory_girl_rails", "~> 4.7.0"
   gem "shoulda-matchers", "~> 3.1.1"
+  gem "formulaic"
 end
 
 group :development do
